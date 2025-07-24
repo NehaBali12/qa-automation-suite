@@ -1,0 +1,345 @@
+{
+	"info": {
+		"_postman_id": "eec52c7c-ae4d-4837-aa4a-f16d88a1fe27",
+		"name": "Conduit API Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "45839055",
+		"_collection_link": "https://nehabali-2535714.postman.co/workspace/bcffb952-56c8-4fda-8dec-686eba06d60b/collection/45839055-eec52c7c-ae4d-4837-aa4a-f16d88a1fe27?action=share&source=collection_link&creator=45839055"
+	},
+	"item": [
+		{
+			"name": "Login - valid",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Login successful and the status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const token = pm.response.json().user.token;",
+							"pm.collectionVariables.set(\"token\", token);",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"user\": { \"email\": \"newuser890@example.com\", \"password\": \"password123\" } }"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login - Invalid Credentials",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Invalid Credentails\", () => pm.expect(pm.response.code).to.be.oneOf([401,403]));"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"user\": { \"email\": \"wrong@example.com\", \"password\": \"wrongpass\" } }"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Articles",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"List Of articles\", () => pm.response.to.have.status(200));",
+							"pm.test(\"Articles is array\", () => pm.expect(pm.response.json().articles).to.be.an('array'));"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/articles",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"articles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Article",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Article created and the status code is 201\", () => pm.response.to.have.status(201));",
+							"const slug = pm.response.json().article.slug;",
+							"pm.collectionVariables.set(\"slug\", slug);",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Token {{token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"article\": { \"title\": \"Test Title\", \"description\": \"Desc\", \"body\": \"Body text\", \"tagList\": [] } }"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/articles",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"articles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Article",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Article updated successfully and the status code is 200\", () => pm.response.to.have.status(200));",
+							"",
+							"const slug = pm.response.json().article.slug;",
+							"pm.collectionVariables.set(\"slug\", slug);",
+							"",
+							"const uniqueTitle = \"Updated Title \" + Math.floor(Math.random() * 100000);",
+							"pm.collectionVariables.set(\"uniqueTitle\", uniqueTitle);",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Token {{token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"article\": {\n    \"title\": \"{{uniqueTitle}}\"\n  }\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/articles/{{slug}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"articles",
+						"{{slug}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Article",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Article deleted successfully and the Status code is 204\", () => pm.response.to.have.status(204));"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/articles/{{slug}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"articles",
+						"{{slug}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete non existing Article",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Deleting non existing Article and the Status code is 404\", () => pm.response.to.have.status(404));"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/articles/1",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"articles",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer"
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://conduit-api.bondaracademy.com/api"
+		},
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "slug",
+			"value": ""
+		},
+		{
+			"key": "uniqueTitle",
+			"value": ""
+		}
+	]
+}
