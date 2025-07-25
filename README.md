@@ -19,11 +19,12 @@ Automated API tests using Postman
 
 ## Project Setup
 
-## 1. **Install dependencies**
+## 1. **Install dependencies for UI Automation**
 
 ```bash
 npm install playwright
 npm install dotenv
+
 ```
 
 ## 2. **Add `.env` file**
@@ -79,10 +80,27 @@ npx playwright test --headed
 npx allure generate allure-results --clean
 ```
 
-## Open Report
+## Open Report for UI Tests
 
 ```bash
 npx allure open allure-report
+```
+
+## 📊 Newman Report
+
+## Install dependencies for API Postman collection
+```bash
+sudo npm install -g newman newman-reporter-html
+```
+
+## To execute API Postman collection
+ ```bash
+newman run "conduit-postman-collection/Conduit API Tests.postman_collection.json" --reporters cli,html --reporter-html-export report.html
+```
+
+## Open Report for API Tests
+```bash
+open report.html
 ```
 
 ## Project Structure
