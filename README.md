@@ -122,6 +122,8 @@ open report.html
 └── README.md
 └──conduit-postman-collection/
 │  ├──Conduit API Tests.postman_collection.json
+└──.github/workflows
+│          ├──playwright-postman.yaml
 
 ```
 
@@ -149,5 +151,5 @@ open report.html
 
 ## Future Enhancements
 
-- CI integration (e.g., GitHub Actions, Jenkins)
+- Tried GitHub Actions, CI integration (e.g.Jenkins)
 - Multi-environment config support
