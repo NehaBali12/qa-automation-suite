@@ -30,7 +30,7 @@ jobs:
             --reporter-html-export newman-report.html
 
       - name: Upload Newman HTML Report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3.1.2
         with:
           name: newman-report
           path: newman-report.html
@@ -46,7 +46,7 @@ jobs:
         run: npx playwright test
 
       - name: Upload Playwright Report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3.1.2
         with:
           name: playwright-report
           path: playwright-report
